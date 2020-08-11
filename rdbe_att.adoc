@@ -1,0 +1,99 @@
+= DRAFT Procedure for setting attenuation for RDBEs
+E. Himwich, C. Ruszczyk, K.Imah, C. Coughlin, M.Poirier, A. Burns
+Version 0.3 - August 2020
+
+== Introduction
+
+The procedure below can be used to adjust the attenuation settings
+depending on the observing mode. The observing mode usually stays the
+same for a given experiment type. More than one experiment type may
+use the same mode.
+
+Before a new observing mode is used at a station for the first time,
+the procedure can be used to adjust the attenuators and inform the
+Coordinating Center of the correct settings to use in future
+schedules. The determined values can be use locally until the
+schedules are using them as the default.
+
+If this has not been done yet for some observing modes that a station
+is already using, it should be performed for those modes and the
+Coordinating Center informed if any changes are needed.
+
+== Dealing with changes
+
+Due to changes in the situation at the station, e.g., having a warm
+receiver, or a loss of signal chain gain, it may become necessary to
+adjust the values.  If not otherwise apparent, this may become evident
+because the RDBE RMSs are not reaching the target value of about 20.
+
+At that point, the procedure can be re-run or an appropriate _ad hoc_
+change to the values can be used to correct the situation.  As an
+example of the latter approach, an increase in the overall signal
+level of 10 dB might be compensated for by increasing the RFD and/or
+UDC attentions by a net total of 10 dB. Of course, if there this is
+caused by a failure of some component, the failure should be addressed
+as soon as practical.
+
+Once the level is corrected, it can be considered whether the issue is
+likely to continue long enough for it to be worth sending new values
+to the Coordinating Center or to just adjust the schedule values
+locally until the issue is resolved. If the normal setting is made
+with the procedure below, resulting in RDBE attenuator values of 10-15
+dB, the system should be able tolerate level changes of in a range of
+up to about ±10 dB fairly well in the short-term.
+
+== Procedure
+
+The procedure provides a lot of detail to assist users that are
+attempting this for the first time. More experienced users may not
+need so much detail, but may still find it  useful for reference.
+
+. Point the antenna to zenith on a clear day (hopefully there is not a lot of RFI).
+. Open a procedure library for an experiment of the type that you want to make adjustments for, e.g. for a `vo` at `K2`:
++
+    proc=vo0202k2
+
+. Using _pfmed_, make a copy of `ifdbb`, maybe `_ifdt_`.
++
+    st,ifdbb,ifdt
+
+. Use _pfmed_ to make changes to `_ifdt_` for these steps.
++
+NOTE: You must exit _pfmed_ each time you make a change before re-executing the procedure to test the effect.
+
+.. Set all RFD attenuators to `*3*`
++
+NOTE: If you don't have an RFD, set any attenuation before the RDBEs appropriately. If there are just  UDCs, a good value might be `*20*`, then skip the next step.
+.. Set all UDC attenuators to `*10*`
+.. Iterate the following steps to get nominal RMSs of `20`:
+...  Check the RMS values for the current setup:
++
+    ifdt
+    rdbe_atten=
+
+... If too high, increase individual UDC attenuators to get the RMSs closer to  `20`
+... If a UDC attenuator maxes out, increase the corresponding RFD attenuator (by 3-6) and try again
++
+[NOTE]
+====
+
+Adjusting the RFD attenuation may affect other channels, you may need
+to trim their UDC settings again. The typical correspondence of RFD
+channels to UDCs/IFs is given in <<rfdchannels,Table 1>>.
+
+.RFD Channels
+[[rfdchannels]]
+|===============
+| RFD Channel | Signal |UDC Channel|RDBE IF
+
+|  0|       H-pol Low|A-0| A-0
+|  1|       V-pol Low|A-1| A-1
+|  2|       H-pol High|BCD-0| BCD-0
+|  3|       V-pol High|BCD-1|BCD-1
+|===============
+====
+
+.. Once all RMS are nominal (~`20`), look at the RDBE attenuator values
+... Adjust the UDC attenuators to put the RDBE attenuators in the range `10`-`15` if possible
+... If you reach the end of the UDC attenuator range, adjust the corresponding RFD attenuator by 3 and try again
+. When finished,  update your copy of `ifdbb` and send it to the IVS Coordinator Center (`ivscc@lists.nasa.gov`) for use in future schedules.  Please include the experiment type(s) it is to be used for in your message.
