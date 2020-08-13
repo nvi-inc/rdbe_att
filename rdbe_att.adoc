@@ -1,6 +1,6 @@
 = DRAFT Procedure for setting attenuation for RDBEs
 E. Himwich, C. Ruszczyk, K. Imai, C. Coughlin, M. Poirier, A. Burns
-Version 0.6 - August 2020
+Version 0.7 - August 2020
 
 == Introduction
 
@@ -76,6 +76,8 @@ IMPORTANT:  You must exit _pfmed_ each time you make a change before
 re-executing the procedure to test the effect. Use the `ex` commands
 to exit _pfmed_.
 
++
+
 [TIP]
 ====
 
@@ -93,6 +95,8 @@ use in future logins). Then use the `ed,ifdt` command inside _pfmed_
 to edit the procedure.
 
 ====
+
++
 
 .. Set all RFD attenuators to `*3*`
 
@@ -137,13 +141,23 @@ channels to UDCs/IFs is given in <<rfdchannels,Table 1>>.
 |===============
 ====
 
++
+
 .. Once all RMS are nominal (~`20`), look at the RDBE attenuator values
 
 ... Adjust the UDC attenuators to put the RDBE attenuators in the range `10`-`15` if possible
 
 ... If you reach the end of the UDC attenuator range, adjust the corresponding RFD attenuator by 3 and try again
 
-. When finished,  update your copy of `ifdbb` and send it to the IVS
-Coordinator Center (`ivscc@lists.nasa.gov`) for use in future
-schedules.  Please include the experiment type(s) it is to be used for
-in your message.
+. When finished,  rename your old copy of `ifdbb` to `ifdbb_old` and rename `ifdt` to `ifdbb`. In _pfmed_:
+
++
+
+  rn,ifdbb,ifdd_old
+  rn,ifdt,ifdbb
+
++
+
+and send the new version  to the IVS Coordinator Center (`ivscc@lists.nasa.gov`) for use
+in future schedules.  Please include the experiment type(s) it is to
+be used for in your message.
