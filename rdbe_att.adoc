@@ -1,6 +1,6 @@
 = DRAFT Procedure for setting attenuation for RDBEs
-E. Himwich, C. Ruszczyk, K.Imah, C. Coughlin, M.Poirier, A. Burns
-Version 0.3 - August 2020
+E. Himwich, C. Ruszczyk, K. Imai, C. Coughlin, M. Poirier, A. Burns
+Version 0.6 - August 2020
 
 == Introduction
 
@@ -10,19 +10,19 @@ same for a given experiment type. More than one experiment type may
 use the same mode.
 
 Before a new observing mode is used at a station for the first time,
-the procedure can be used to adjust the attenuators and inform the
+the procedure can be used to adjust the attenuation and inform the
 Coordinating Center of the correct settings to use in future
-schedules. The determined values can be use locally until the
+schedules. The determined values can be used locally until the
 schedules are using them as the default.
 
-If this has not been done yet for some observing modes that a station
+If the procedure has not been attempted yet for some observing modes that a station
 is already using, it should be performed for those modes and the
 Coordinating Center informed if any changes are needed.
 
 == Dealing with changes
 
 Due to changes in the situation at the station, e.g., having a warm
-receiver, or a loss of signal chain gain, it may become necessary to
+receiver or a loss of signal chain gain, it may become necessary to
 adjust the values.  If not otherwise apparent, this may become evident
 because the RDBE RMSs are not reaching the target value of about 20.
 
@@ -34,46 +34,90 @@ UDC attentions by a net total of 10 dB. Of course, if there this is
 caused by a failure of some component, the failure should be addressed
 as soon as practical.
 
-Once the level is corrected, it can be considered whether the issue is
-likely to continue long enough for it to be worth sending new values
-to the Coordinating Center or to just adjust the schedule values
-locally until the issue is resolved. If the normal setting is made
-with the procedure below, resulting in RDBE attenuator values of 10-15
-dB, the system should be able tolerate level changes of in a range of
-up to about ±10 dB fairly well in the short-term.
+Once the level is corrected, it should be considered whether the issue
+is likely to continue long enough for it to be worth sending new
+values to the Coordinating Center or to just adjust the schedule
+values locally until the issue is resolved. If the normal setting is
+made with the procedure below, resulting in RDBE attenuator values of
+10-15 dB, the system should be able tolerate level changes of in a
+range of up to about ±10 dB fairly well in the short-term (but that
+should not be a long term solution).
 
 == Procedure
 
-The procedure provides a lot of detail to assist users that are
-attempting this for the first time. More experienced users may not
-need so much detail, but may still find it  useful for reference.
+The procedure in this section provides a lot of detail to assist users
+that are attempting this for the first time. More experienced users
+may not need so much detail, but may still find it useful for
+reference.
 
 . Point the antenna to zenith on a clear day (hopefully there is not a lot of RFI).
-. Open a procedure library for an experiment of the type that you want to make adjustments for, e.g. for a `vo` at `K2`:
+
+. In the FS, open a procedure library for an experiment of the type that you want to make adjustments for, e.g. for a `vo` at `K2`:
+
 +
     proc=vo0202k2
 
-. Using _pfmed_, make a copy of `ifdbb`, maybe `_ifdt_`.
+. Using _pfmed_, make a copy of `ifdbb`, maybe `_ifdt_`. In _pfmed_:
+
 +
     st,ifdbb,ifdt
 
-. Use _pfmed_ to make changes to `_ifdt_` for these steps.
 +
-NOTE: You must exit _pfmed_ each time you make a change before re-executing the procedure to test the effect.
+
+IMPORTANT:  You must use _pfmed_ to modify procedures to keep them in sync
+with the FS. Help is available in _pfmed_ with the `help` command.
+Commands support tab-completion where it is useful.
+
+. Use _pfmed_ to make changes to `_ifdt_` for these steps:
+
++
+
+IMPORTANT:  You must exit _pfmed_ each time you make a change before
+re-executing the procedure to test the effect. Use the `ex` commands
+to exit _pfmed_.
+
+[TIP]
+====
+
+You can use the _pfmed_ `vi` command to edit the procedure with `vi`,
+e.g., `vi,ifdt`. This will also work for _emacs_ with `emacs,ifdt`. If
+you would like to use a different editor you can specify it by setting
+the `EDITOR` environment variable. For example to use _nano_, you can
+use:
+
+`export EDITOR=nano`
+
+before you enter _pfmed_ (this is only needed once per window, or text
+terminal login, instance; it could be added to `~oper/.profile` for
+use in future logins). Then use the `ed,ifdt` command inside _pfmed_
+to edit the procedure.
+
+====
 
 .. Set all RFD attenuators to `*3*`
+
 +
-NOTE: If you don't have an RFD, set any attenuation before the RDBEs appropriately. If there are just  UDCs, a good value might be `*20*`, then skip the next step.
+
+NOTE: If you don't have an RFD, set any attenuation before the RDBEs
+appropriately. If there are just UDCs, a good starting value might be
+`*20*`. Use the value you chose in place of the `*10*` in the next step.
+
 .. Set all UDC attenuators to `*10*`
+
 .. Iterate the following steps to get nominal RMSs of `20`:
+
 ...  Check the RMS values for the current setup:
+
 +
     ifdt
     rdbe_atten=
 
 ... If too high, increase individual UDC attenuators to get the RMSs closer to  `20`
+
 ... If a UDC attenuator maxes out, increase the corresponding RFD attenuator (by 3-6) and try again
+
 +
+
 [NOTE]
 ====
 
@@ -94,6 +138,12 @@ channels to UDCs/IFs is given in <<rfdchannels,Table 1>>.
 ====
 
 .. Once all RMS are nominal (~`20`), look at the RDBE attenuator values
+
 ... Adjust the UDC attenuators to put the RDBE attenuators in the range `10`-`15` if possible
+
 ... If you reach the end of the UDC attenuator range, adjust the corresponding RFD attenuator by 3 and try again
-. When finished,  update your copy of `ifdbb` and send it to the IVS Coordinator Center (`ivscc@lists.nasa.gov`) for use in future schedules.  Please include the experiment type(s) it is to be used for in your message.
+
+. When finished,  update your copy of `ifdbb` and send it to the IVS
+Coordinator Center (`ivscc@lists.nasa.gov`) for use in future
+schedules.  Please include the experiment type(s) it is to be used for
+in your message.
