@@ -1,6 +1,6 @@
 = DRAFT Procedure for setting attenuation for RDBEs
 E. Himwich, C. Ruszczyk, K. Imai, C. Coughlin, M. Poirier, A. Burns
-Version 0.8 - August 2020
+Version 0.9 - August 2020
 
 == Introduction
 
@@ -30,9 +30,9 @@ At that point, the procedure can be re-run or an appropriate _ad hoc_
 change to the values can be used to correct the situation.  As an
 example of the latter approach, an increase in the overall signal
 level of 10 dB might be compensated for by increasing the RFD and/or
-UDC attentions by a net total of 10 dB. Of course, if there this is
-caused by a failure of some component, the failure should be addressed
-as soon as practical.
+UDC attentions by a net total of 10 dB. Of course, if this is caused
+by a failure of some component, the failure should be addressed as
+soon as practical.
 
 Once the level is corrected, it should be considered whether the issue
 is likely to continue long enough for it to be worth sending new
@@ -235,7 +235,7 @@ using the example `ifdbb` procedure in Appendix A.
 
 There are three things to notice here:
 
-. The attenuator settings are all approximately in `10`-`15` dB range.
+. The attenuator settings are all approximately in the `10`-`15` dB range.
 
 . The RMSs are all about `20`.
 
