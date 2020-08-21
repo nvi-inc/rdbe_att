@@ -4,7 +4,7 @@
 if ($#ARGV < 0) {
     print "Usage: $0 new station files\n\n";
     print "Insert content of file 'new' for the 'ifdbb' procedure of 'station' in 'files'.\n\n";
-    print " - Version 1.0\n";
+    print " - Version 1.01\n";
     print " - The 'files' should be '.skd' schedules for broadband observations that\n";
     print "   contain a section for 'station' in the '\$PROCS' block.\n";
     print " - File 'new' must start with a 'define  ifdbb ' line and end with an 'enddef'\n";
@@ -28,6 +28,7 @@ $station = shift or die "Try $0 for help\n";
 
 FILE: foreach $name (@ARGV) {
     print "Processing $name\n";
+    seek NEW, 0, SEEK_SET or die "Cannot rewind $new: $!";
     $bak = $name . ".bak";
     $out = $name;
     if (!-e $name) {
