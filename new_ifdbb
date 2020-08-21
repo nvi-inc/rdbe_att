@@ -7,7 +7,7 @@ if ($#ARGV < 0) {
 
 Insert content of file 'new' for the 'ifdbb' procedure of 'station' in 'files'.
 
- - Version 1.02
+ - Version 1.03
  - The 'files' should be '.skd' schedules for broadband observations that
    contain a section for 'station' in the '\$PROCS' block.
  - File 'new' must start with a 'define  ifdbb ' line and end with an 'enddef'
@@ -21,9 +21,10 @@ Insert content of file 'new' for the 'ifdbb' procedure of 'station' in 'files'.
  - The original input 'files' are renamed with a '.bak' extension as a backup.
    The are used to automatically recover from some errors and can be used
    manually recover from any others.
- - If the contents of 'new' already matches what is in 'files', new output
-   'files' will still be generated.  This can be checked for by using 'diff'
-   to compare the output version to the '.bak' version.
+ - Even if the content is the same, what is in 'new' will replace an old
+   'ifdbb' procedure. If no errors were reported in the processing, you can
+   check for this by using 'diff' to compare the output version to the '.bak'
+   version, no change will be visible.
 ";
     exit -1;
 }
