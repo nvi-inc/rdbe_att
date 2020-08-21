@@ -2,22 +2,29 @@
 
 
 if ($#ARGV < 0) {
-    print "Usage: $0 new station files\n\n";
-    print "Insert content of file 'new' for the 'ifdbb' procedure of 'station' in 'files'.\n\n";
-    print " - Version 1.01\n";
-    print " - The 'files' should be '.skd' schedules for broadband observations that\n";
-    print "   contain a section for 'station' in the '\$PROCS' block.\n";
-    print " - File 'new' must start with a 'define  ifdbb ' line and end with an 'enddef'\n";
-    print "   line.\n";
-    print " - A line that is known to be correct in all details is always used in place\n";
-    print "   of the first line in 'new'.\n";
-    print " - A progress report is printed during processing. It may be useful for\n";
-    print "   troubleshooting, e.g., 'station' (which is case sensitive) being misspelled.\n";
-    print " - DOS/Windows line endings in 'new' and the input 'files' will be converted to\n";
-    print "   UNIX line endings while being copied to the output 'files'.\n";
-    print " - The original input 'files' are renamed with a '.bak' extension as a backup.\n";
-    print "   The are used to automatically recover from some errors and can be used\n";
-    print "   manually recover from any others.\n";
+    print
+"Usage: $0 new station files
+
+Insert content of file 'new' for the 'ifdbb' procedure of 'station' in 'files'.
+
+ - Version 1.02
+ - The 'files' should be '.skd' schedules for broadband observations that
+   contain a section for 'station' in the '\$PROCS' block.
+ - File 'new' must start with a 'define  ifdbb ' line and end with an 'enddef'
+   line
+ - A line that is known to be correct in all details is always used in place
+   of the first line in 'new'.
+ - A progress report is printed during processing. It may be useful for
+   troubleshooting, e.g., 'station' (which is case sensitive) being misspelled.
+ - DOS/Windows line endings in 'new' and the input 'files' will be converted to
+   UNIX line endings while being copied to the output 'files'.
+ - The original input 'files' are renamed with a '.bak' extension as a backup.
+   The are used to automatically recover from some errors and can be used
+   manually recover from any others.
+ - If the contents of 'new' already matches what is in 'files', new output
+   'files' will still be generated.  This can be checked for by using 'diff'
+   to compare the output version to the '.bak' version.
+";
     exit -1;
 }
 
