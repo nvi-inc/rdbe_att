@@ -1,23 +1,26 @@
-= DRAFT Procedure for setting attenuation for RDBEs
-E. Himwich, C. Ruszczyk, K. Imai, C. Coughlin, M. Poirier, A. Burns
-Version 0.9 - August 2020
+= DRAFT Method for setting attenuation for RDBEs
+E. Himwich, C. Ruszczyk, K. Imai, C. Coughlin, M. Poirier, A. Burns, E. Terrazas
+Version 0.91 - August 2020
 
 == Introduction
 
-The procedure below can be used to adjust the attenuation settings
-depending on the observing mode. The observing mode usually stays the
-same for a given experiment type. More than one experiment type may
-use the same mode.
+The <<Method>> section below can be used to adjust the attenuation
+settings depending on the observing mode. The observing mode usually
+stays the same for a given experiment type.  More than one experiment
+type may use the same mode.
 
 Before a new observing mode is used at a station for the first time,
-the procedure can be used to adjust the attenuation and inform the
-Coordinating Center of the correct settings to use in future
-schedules. The determined values can be used locally until the
-schedules are using them as the default.
+the method can be used to adjust the attenuation and inform the
+Coordinating Center of the correct settings to use in future schedules
+for that experiment type or observing mode. The determined values can
+be used locally until the schedules received are using them as the default.
 
-If the procedure has not been attempted yet for some observing modes that a station
-is already using, it should be performed for those modes and the
-Coordinating Center informed if any changes are needed.
+If the method has not been attempted yet for some observing modes that
+a station is already using, it should be performed for those modes and
+the Coordinating Center informed if any changes that are needed.
+
+If there are changes at the station, an update may be necessary. This
+is described in the next section.
 
 == Dealing with changes
 
@@ -26,51 +29,79 @@ receiver or a loss of signal chain gain, it may become necessary to
 adjust the values.  If not otherwise apparent, this may become evident
 because the RDBE RMSs are not reaching the target value of about 20.
 
-At that point, the procedure can be re-run or an appropriate _ad hoc_
+At that point, the method can be re-run or an appropriate _ad hoc_
 change to the values can be used to correct the situation.  As an
 example of the latter approach, an increase in the overall signal
 level of 10 dB might be compensated for by increasing the RFD and/or
-UDC attentions by a net total of 10 dB. Of course, if this is caused
+UDC attenuations by a net total of 10 dB. Of course, if this is caused
 by a failure of some component, the failure should be addressed as
 soon as practical.
 
 Once the level is corrected, it should be considered whether the issue
 is likely to continue long enough for it to be worth sending new
-values to the Coordinating Center or to just adjust the schedule
-values locally until the issue is resolved. If the normal setting is
-made with the procedure below, resulting in RDBE attenuator values of
-10-15 dB, the system should be able tolerate level changes of in a
-range of up to about ±10 dB fairly well in the short-term (but that
-should not be a long term solution).
+values to the Coordinating Center or to just adjust the values locally
+until the issue is resolved. If a change only afffects one
+experiment, it may not be worth developing a new `ifdbb` procedure;
+instead the change to can be made directly in the `ifdbb` procedure
+for that experiment. That approach can be followed for some time, but
+eventually it may be better to update the `ifdbb` procedure used by
+the schedules being sent rather than adjusting it each time at the
+station.
 
-== How attenations interact
+If a new `ifdbb` procedure is  developed, it can be inserted into
+schedules locally using the method in
+<<Updating the ifdbb procedure in a schedule locally>> section below.
+
+If it is worth sending the updated version used by the schedule
+writers, the method in
+<<Sending an updated ifdbb for use by schedule writers>>
+section below can be used. This is appropriate for
+permanent or long lasting changes, reducing the amount of
+manual work at the station.
+
+If the attenuation settings are determined using the <<Method>>
+section below, resulting in RDBE attenuator values of 10-15 dB, the
+system should be able to tolerate level changes of in a range of up to
+about ±10 dB fairly well in the short-term, including weather.
+However, it is recommened that this not be used as a band-aid for a
+long-term problem.
+
+== How attenuations interact
 
 The total attenuation for each IF signal is the sum of the RFD, UDC,
 and RDBE attenuation in the signal path for that IF channel. For a
-given RFD and UDC attenuation setting, the RDBE will try to adjust its
-attenuation to reach the nominal RMS, usually 20, in each channel.
+given signal level and RFD and UDC attenuation settings, the RDBE will
+try to adjust its attenuation to reach the nominal RMS, usually 20, in
+each channel.
 
 Suppose that has happened, i.e., the RMS has adjusted to 20. Then the
 total of the attenuation for that channel has reached the right level
 to get 20 as the RMS level. Let's say that the attenuations are RFD:
-5, UDC: 10, and RDBE: 15. This gives a total attenuation of 30 dB.
+20, UDC: 15, and RDBE: 15. This gives a total attenuation of 50 dB.
 
-Now suppose the UDC attenuation for that IF is increased by 5 dB. To
+Now suppose that the UDC attenuation for that IF is increased by 5 dB. To
 get an RMS of 20, the RDBE will have to reduce its attenuation by
-about the same amount.  Now the attenuations should be about RFD: 5,
-UDC: 15, and RDBE: 10. The total is still 30 dB, but it is distributed
-differently.
+about the same amount to get to an RMS of 20.  Now the attenuations
+would be about RFD: 20, UDC: 20, and RDBE: 10. The total is still 50
+dB, but it is distributed differently.
 
-This is an example of the fact that the RDBE attenuation changes in
-the opposite direct of the RFD plus UDC attention. What is being held
-constant is the RMS of 20 (assuming it is possible to get to 20).
+This is also an example of the fact that the RDBE attenuation changes in
+the opposite direction of the RFD plus UDC attenuation. What is being
+held constant is the RMS of 20 (assuming it is possible to get to 20).
 
-== Procedure
+== Method
 
-The procedure in this section provides a lot of detail to assist users
-that are attempting this for the first time. More experienced users
-may not need so much detail, but may still find it useful for
+The basic strategy is to adjust the RFD and UDC attenuators to get the
+RDBE RMSs around 20, working at zenith on a clear day. Then the
+attenuator settings are further refined to get the RDBE attenuations in the
+`10`-`15` dB range.
+
+The description in this section provides a lot of detail to assist
+users that are attempting this for the first time. More experienced
+users may not need so much detail, but may still find it useful for
 reference.
+
+All steps should be performed as `oper`.
 
 . Point the antenna to zenith on a clear day (hopefully there is not a lot of RFI).
 
@@ -80,26 +111,19 @@ reference.
     proc=vo0202k2
 
 . Using _pfmed_, make a copy of `ifdbb`, maybe `_ifdt_`. In _pfmed_:
-
 +
     st,ifdbb,ifdt
-
 +
-
 WARNING:  You must use _pfmed_ to modify procedures to keep them in sync
 with the FS. Help is available in _pfmed_ with the `help` command.
 Commands support tab-completion where it is useful.
 
 . Use _pfmed_ to make changes to `_ifdt_` for these steps:
-
 +
-
 IMPORTANT:  You must exit _pfmed_ each time you make a change before
 re-executing the procedure to test the effect. Use the `ex` commands
 to exit _pfmed_.
-
 +
-
 [TIP]
 ====
 
@@ -114,21 +138,21 @@ use:
 before you enter _pfmed_ (this is only needed once per window, or text
 terminal login, instance; it could be added to `~oper/.profile` for
 use in future logins). Then use the `ed,ifdt` command inside _pfmed_
-to edit the procedure.
+to edit the procedure with your specified editor.
 
 ====
 
 +
 
-.. Set all RFD attenuators to `*3*`
+.. Set all RFD attenuators to `10`
 
 +
 
 NOTE: If you don't have an RFD, set any attenuation before the RDBEs
 appropriately. If there are just UDCs, a good starting value might be
-`*20*`. Use the value you chose in place of the `*10*` in the next step.
+`20`. Use the value you choose in place of the `10` in the next step.
 
-.. Set all UDC attenuators to `*10*`
+.. Set all UDC attenuators to `10`
 
 .. Iterate the following steps to get nominal RMSs of `20`:
 
@@ -142,12 +166,12 @@ appropriately. If there are just UDCs, a good starting value might be
 TIP: `help=rdbe_atten` will display a help page for `rdbe_atten`
 command that explains what it does and its output.
 
-... If too high, increase individual UDC attenuators to get the RMSs closer to  `20`
-
-... If a UDC attenuator maxes out, increase the corresponding RFD attenuator (by 3-6) and try again
-
+... If too high, increase individual UDC attenuators to get the RMSs closer to  `20` (if too low, decrease the UDC attenuators).
 +
-
+If a UDC attenuator is near its maximum, `31.5`, increase the
+corresponding RFD attenuator by `10` (or `5`) dB and try again (if the
+UDC attenuation is near `0` decrease the RFD attenuation instead).
++
 [NOTE]
 ====
 
@@ -169,24 +193,94 @@ channels to UDCs/IFs is given in <<rfdchannels,Table 1>>.
 
 +
 
-.. Once all RMS are nominal (~`20`), look at the RDBE attenuator values
+.. Once all RMS are nominal (~`20`), look at the RDBE attenuator
+values. Use the same iterative steps as above to adjust the UDC attenuators to
+put the RDBE attenuators in the range `10`-`15` if possible.
++
+TIP: Increasing the sum of RFD and UDC attenuation will cause the RDBE
+attenuation to decrease (and vice-versa) to reach an RMS of `20`.
++
+TIP: It is desirable to get the RFD and UDC attenuators in the middle
+of their ranges to the extent possible, consistent with the RDBE
+attenuation being in the `10`-`15` dB range.  The RFD and UDC attenuators
+have a range of `0`-`31.5` dB (in `0.5` dB steps).
++
+NOTE: There are usually fixed attenuators before the RFD that could be
+changed, but that is better avoided unless absolutely necessary.
 
-... Adjust the UDC attenuators to put the RDBE attenuators in the range `10`-`15` if possible
-
-... If you reach the end of the UDC attenuator range, adjust the corresponding RFD attenuator by 3 and try again
-
-. When finished,  rename your old copy of `ifdbb` to `ifdbb_old` and rename `ifdt` to `ifdbb`. In _pfmed_:
+. When finished, prepare a new procedure library with just your
+updated procedure. You can use a library name of your choosing, but
+make the final procedure name `ifdbb`. In the example below, the
+new procedure library is `voattk2` (`vo` for the experiment type,
+`att` for attenuation, and `k2` as the station two-letter code).  The
+example also assumes you used `ifdt` as the name of your test
+procedure and that you were working with procedure library `vo0202k2`
+to begin with.  Please adjust the names as needed.  In _pfmed_:
 
 +
 
-  rn,ifdbb,ifdd_old
-  rn,ifdt,ifdbb
+....
+pfcr,voattk2
+pf,voattk2
+st,ifdt::vo0202k2,ifdbb
+ex
+....
 
-+
+. Consider whether to use the updated procedure locally and/or send it
+to the schedule writers for use in future experiments.  Those actions
+are described in the next two sections, in that order.
 
-and send the new version  to the IVS Coordinator Center (`ivscc@lists.nasa.gov`) for use
-in future schedules.  Please include the experiment type(s) it is to
-be used for in your message.
+== Updating the ifdbb procedure in a schedule locally
+
+You can use a new `ifdbb` procedure in any schedules of the
+appropriate type if schedule writers have not started using the
+new version yet.  The example below uses the names from the <<Method>>
+section above. All steps in this section should be executed as `oper`.
+
+To update a a local `.skd` file, execute:
+
+....
+cd /usr2/sched
+new_ifdbb ../proc/voattk2.prc KOKEE12M vo0202.skd
+....
+
+NOTE: If your version of the FS does not have `new_ifdbb`, you can use
+a copy that has been placed in the `oper` home directory as
+`~/new_ifdbb` and made executable with `chmod a+x ~/new_ifdbb`.
+
+You will then need to regenerate the SNAP procedures with _drudg_. Make
+sure the procedure file is not open in the FS, or that the FS is not
+running, then:
+
+....
+cd /usr2/sched
+drudg vo0202.skd
+....
+
+In response to the prompts:
+
+. Enter your station code (`K2` for our example).
+. Select option `12` to generate the procedures.
+. Answer `y` if requested to confirm purging the  existing procedure file.`
+. Enter `0` to exit `drudg`.
+
+You can verify that the correct values have been inserted by opening
+the procedure library in the FS and using `ifdbb` to set the IFs up
+and `rdbe_atten=` to adjust the RDBE levels.  You should get
+results that match your changes, presumably with RMSs around `20` with
+the RDBE attenuators in the range `10`-`15` dB.
+
+TIP: You can also check that the change in the `.skd` file using the
+`diff` command, as described in
+<<Appendix C - Example diff output comparing schedule files>> below.
+
+== Sending an updated ifdbb for use by schedule writers
+
+For long term changes, you can send a library with a new `ifdbb` procedure
+(`/usr2/proc/voattk2.prc` for the example in the <<Method>> section
+above) as a file attachment to the IVS Coordinator Center
+(`ivscc@lists.nasa.gov`) for use in future schedules.  Please include
+the experiment type(s) it is to be used for in your message.
 
 == Appendix A - Example ifdbb procedure
 
@@ -264,4 +358,69 @@ variation.
 19:02:04/rdbe_attenc/,,, 0,15.0,20.2, 1,13.5,20.6
 19:02:04/rdbe_attena/,,, 0,12.5,19.8, 1,14.5,19.4
 19:02:04/rdbe_attend/,,, 0,13.5,20.6, 1,13.0,20.4
+....
+
+== Appendix C - Example diff output comparing schedule files
+
+You can use the `diff` command to compare the result of `new_ifdbb`
+script to the original schedule. Working with the examples in this
+document, the following commands can be used:
+
+....
+cd /usr2/sched
+diff vo0202.skd vo0202.skd.bak
+....
+
+In the following output generated from these commands, please note that:
+
+. Only lines that changed are shown.
+
+. Lines from the updated schedule (the first file in the `diff`
+command) are preceded by `<`; lines from the old schedule (second
+file), `>`.
+
+. Except for the `define` line (which may or not have changed),
+only lines that set attenuators have changed. In particular, no lines
+that refer to LO settings are shown as changed. Some attenuator
+setting lines may not be shown if they didn't change.
+
+. The station for which the change was made is not visible. However,
+if you used your station name with `new_ifdbb`, the change was for
+your station. You can also verify that you have updated the procedure
+for your station by testing the new `ifdbb` procedure as described at
+the end of the <<Updating the ifdbb procedure in a schedule locally>>
+section above. Alternatively, you can list it from a newly generated
+procedure library (`vo0202k2.prc` for the example) in _pfmed_ (use the
+`li` command) to see if you get the updated version. The method for
+regenerating the library is also described in the same section above.
+
+....
+2352c2352
+< define  ifdbb         00000000000x
+---
+> define  ifdbb         16034205923x
+2368,2375c2368,2375
+< sy=popen 's_client -h udca -c udc_atten=0:17 2>&1' -n udcca
+< sy=popen 's_client -h udcb -c udc_atten=0:25 2>&1' -n udccb
+< sy=popen 's_client -h udcc -c udc_atten=0:30 2>&1' -n udccc
+< sy=popen 's_client -h udcd -c udc_atten=0:5 2>&1' -n udccd
+< sy=popen 's_client -h udca -c udc_atten=1:17 2>&1' -n udcca
+< sy=popen 's_client -h udcb -c udc_atten=1:27 2>&1' -n udccb
+< sy=popen 's_client -h udcc -c udc_atten=1:27 2>&1' -n udccc
+< sy=popen 's_client -h udcd -c udc_atten=1:5 2>&1' -n udccd
+---
+> sy=popen 's_client -h udca -c udc_atten=0:20 2>&1' -n udcca
+> sy=popen 's_client -h udcb -c udc_atten=0:20 2>&1' -n udccb
+> sy=popen 's_client -h udcc -c udc_atten=0:20 2>&1' -n udccc
+> sy=popen 's_client -h udcd -c udc_atten=0:20 2>&1' -n udccd
+> sy=popen 's_client -h udca -c udc_atten=1:20 2>&1' -n udcca
+> sy=popen 's_client -h udcb -c udc_atten=1:20 2>&1' -n udccb
+> sy=popen 's_client -h udcc -c udc_atten=1:20 2>&1' -n udccc
+> sy=popen 's_client -h udcd -c udc_atten=1:20 2>&1' -n udccd
+2379,2380c2379,2380
+< sy=popen 's_client -h rfd -c rfd_atten=2:9 2>&1' -n rfdcn
+< sy=popen 's_client -h rfd -c rfd_atten=3:9 2>&1' -n rfdcn
+---
+> sy=popen 's_client -h rfd -c rfd_atten=2:10 2>&1' -n rfdcn
+> sy=popen 's_client -h rfd -c rfd_atten=3:10 2>&1' -n rfdcn
 ....
