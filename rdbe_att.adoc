@@ -1,36 +1,65 @@
+//
+// Copyright (c) 2020-2021 NVI, Inc.
+//
+// This file is part of the FSL10 Linux distribution.
+// (see http://github.com/nvi-inc/fsl10).
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+//
+
+:doctype: book
+
 = DRAFT Method for setting attenuation for RDBEs
 E. Himwich, C. Ruszczyk, K. Imai, C. Coughlin, M. Poirier, A. Burns, E. Terrazas
-Version 0.91 - August 2020
+Version 0.92 - August 2020
+
+:sectnums:
 
 == Introduction
 
 The <<Method>> section below can be used to adjust the attenuation
 settings depending on the observing mode. The observing mode usually
-stays the same for a given experiment type.  More than one experiment
-type may use the same mode.
+stays the same for a given experiment type. If the observing changes
+with an experiment, at this time the only way to deal with that is to
+find the best compromise of attenuation settings for all the modes in
+the experiment. Additionally, please be aware that more than one
+experiment type may use the same mode.
 
 Before a new observing mode is used at a station for the first time,
-the method can be used to adjust the attenuation and inform the
-Coordinating Center of the correct settings to use in future schedules
-for that experiment type or observing mode. The determined values can
-be used locally until the schedules received are using them as the default.
+the method given here can be used to adjust the attenuation and then
+the Coordinating Center can be informed of the correct settings to use
+in future schedules for that experiment type or observing mode. The
+determined values can be used locally until the schedules received are
+using them as the default.
 
 If the method has not been attempted yet for some observing modes that
 a station is already using, it should be performed for those modes and
-the Coordinating Center informed if any changes that are needed.
+the Coordinating Center informed of any changes that are needed.
 
-If there are changes at the station, an update may be necessary. This
-is described in the next section.
+If there are changes at a station, an update may be necessary. This
+is described in the next section <<Dealing with changes>>.
 
 == Dealing with changes
 
-Due to changes in the situation at the station, e.g., having a warm
+Due to changes in the situation at a station, e.g., having a warm
 receiver or a loss of signal chain gain, it may become necessary to
-adjust the values.  If not otherwise apparent, this may become evident
-because the RDBE RMSs are not reaching the target value of about 20.
+adjust the values. If not otherwise apparent, this may become evident
+because the RDBE RMSs are not reaching the target value, typically
+about `20`.
 
 At that point, the method can be re-run or an appropriate _ad hoc_
-change to the values can be used to correct the situation.  As an
+change to the values can be used to correct the situation. As an
 example of the latter approach, an increase in the overall signal
 level of 10 dB might be compensated for by increasing the RFD and/or
 UDC attenuations by a net total of 10 dB. Of course, if this is caused
@@ -40,30 +69,29 @@ soon as practical.
 Once the level is corrected, it should be considered whether the issue
 is likely to continue long enough for it to be worth sending new
 values to the Coordinating Center or to just adjust the values locally
-until the issue is resolved. If a change only afffects one
-experiment, it may not be worth developing a new `ifdbb` procedure;
-instead the change to can be made directly in the `ifdbb` procedure
+until the issue is resolved. If a change only affects one experiment,
+it may not be worth sending the new values to the Coordinating Center.
+Instead the change can just be made directly in the `ifdbb` procedure
 for that experiment. That approach can be followed for some time, but
-eventually it may be better to update the `ifdbb` procedure used by
-the schedules being sent rather than adjusting it each time at the
-station.
+eventually it may be better to send an updated `ifdbb` procedure to
+the Coordinating Center so it can be included in schedules
+automatically rather than adjusting it each time at the station.
 
-If a new `ifdbb` procedure is  developed, it can be inserted into
+If a new `ifdbb` procedure is developed, it can be inserted into
 schedules locally using the method in
 <<Updating the ifdbb procedure in a schedule locally>> section below.
 
-If it is worth sending the updated version used by the schedule
-writers, the method in
-<<Sending an updated ifdbb for use by schedule writers>>
-section below can be used. This is appropriate for
-permanent or long lasting changes, reducing the amount of
-manual work at the station.
+If it is worth sending the updated version to the Coordinating Center,
+the method in
+<<Sending an updated ifdbb for use by schedule writers>> section below
+can be used. This is appropriate for permanent or long lasting
+changes, reducing the amount of manual work needed at the station.
 
 If the attenuation settings are determined using the <<Method>>
 section below, resulting in RDBE attenuator values of 10-15 dB, the
 system should be able to tolerate level changes of in a range of up to
 about ±10 dB fairly well in the short-term, including weather.
-However, it is recommened that this not be used as a band-aid for a
+However, it is recommended that this not be used as a band-aid for a
 long-term problem.
 
 == How attenuations interact
@@ -71,72 +99,84 @@ long-term problem.
 The total attenuation for each IF signal is the sum of the RFD, UDC,
 and RDBE attenuation in the signal path for that IF channel. For a
 given signal level and RFD and UDC attenuation settings, the RDBE will
-try to adjust its attenuation to reach the nominal RMS, usually 20, in
-each channel.
+try to adjust its attenuation to reach the nominal RMS, usually `20`,
+in each channel.
 
-Suppose that has happened, i.e., the RMS has adjusted to 20. Then the
-total of the attenuation for that channel has reached the right level
-to get 20 as the RMS level. Let's say that the attenuations are RFD:
-20, UDC: 15, and RDBE: 15. This gives a total attenuation of 50 dB.
+Suppose that has happened, i.e., the RMS has adjusted to `20`. Then
+the total of the attenuation for that channel has reached the right
+level to get `20` as the RMS level. Let's say that the attenuations
+are RFD: `20`, UDC: `15`, and RDBE: `15`. This gives a total
+attenuation of `50` dB.
 
-Now suppose that the UDC attenuation for that IF is increased by 5 dB. To
-get an RMS of 20, the RDBE will have to reduce its attenuation by
-about the same amount to get to an RMS of 20.  Now the attenuations
-would be about RFD: 20, UDC: 20, and RDBE: 10. The total is still 50
-dB, but it is distributed differently.
-
-This is also an example of the fact that the RDBE attenuation changes in
-the opposite direction of the RFD plus UDC attenuation. What is being
-held constant is the RMS of 20 (assuming it is possible to get to 20).
+Now suppose that the UDC attenuation for that IF is increased by 5 dB.
+To get an RMS of `20`, the RDBE will have to reduce its attenuation by
+about the same amount. Now the attenuations would be about RFD: `20`,
+UDC: `20`, and RDBE: `10`. The total is still 50 dB, but it is
+distributed differently. This is also an example of the fact that the
+RDBE attenuation changes in the opposite direction of the RFD plus UDC
+attenuation. What is being held constant is the RMS of `20` (assuming
+it is possible to get to `20`).
 
 == Method
 
 The basic strategy is to adjust the RFD and UDC attenuators to get the
-RDBE RMSs around 20, working at zenith on a clear day. Then the
-attenuator settings are further refined to get the RDBE attenuations in the
-`10`-`15` dB range.
+RDBE RMSs around `20`, working at zenith on a clear day. Then the
+attenuator settings are further refined to get the RDBE attenuations
+in the `10`-`15` dB range.
 
 The description in this section provides a lot of detail to assist
 users that are attempting this for the first time. More experienced
 users may not need so much detail, but may still find it useful for
-reference.
+reference. To help illustrate what is involved, two appendices are
+included, <<Example ifdbb procedure>> and
+<<Example rdbe_atten= output>>.
 
-All steps should be performed as `oper`.
+All steps should be performed as _oper_.
 
-. Point the antenna to zenith on a clear day (hopefully there is not a lot of RFI).
+. Point the antenna to zenith on a clear day (hopefully there is not a
+lot of RFI).
 
-. In the FS, open a procedure library for an experiment of the type that you want to make adjustments for, e.g. for a `vo` at `K2`:
+. In the FS, open a procedure library for an experiment of the type
+that you want to make adjustments for, e.g. for a `vo` at `K2`:
 
 +
     proc=vo0202k2
 
-. Using _pfmed_, make a copy of `ifdbb`, maybe `_ifdt_`. In _pfmed_:
-+
-    st,ifdbb,ifdt
-+
-WARNING:  You must use _pfmed_ to modify procedures to keep them in sync
-with the FS. Help is available in _pfmed_ with the `help` command.
-Commands support tab-completion where it is useful.
+. Using _pfmed_, make a copy of `ifdbb`, maybe `ifdt`. In _pfmed_:
 
-. Use _pfmed_ to make changes to `_ifdt_` for these steps:
+    st,ifdbb,ifdt
+    ex
+
 +
-IMPORTANT:  You must exit _pfmed_ each time you make a change before
+
+IMPORTANT: You _must_ use _pfmed_ to modify procedures to keep them in
+sync with the FS. Help is available in _pfmed_ with the `help`
+command. Commands support tab-completion where it is useful.
+
+. Use _pfmed_ to make changes to the attenuation settings in `ifdt`
+for these steps:
+
++
+
+CAUTION: You must exit _pfmed_ each time you make a change before
 re-executing the procedure to test the effect. Use the `ex` commands
 to exit _pfmed_.
+
 +
+
 [TIP]
 ====
 
-You can use the _pfmed_ `vi` command to edit the procedure with `vi`,
+You can use the _pfmed_ `vi` command to edit the procedure with _vi_,
 e.g., `vi,ifdt`. This will also work for _emacs_ with `emacs,ifdt`. If
 you would like to use a different editor you can specify it by setting
 the `EDITOR` environment variable. For example to use _nano_, you can
 use:
 
-`export EDITOR=nano`
+ export EDITOR=nano
 
 before you enter _pfmed_ (this is only needed once per window, or text
-terminal login, instance; it could be added to `~oper/.profile` for
+terminal login, instance; it could be added to _~oper/.profile_ for
 use in future logins). Then use the `ed,ifdt` command inside _pfmed_
 to edit the procedure with your specified editor.
 
@@ -149,73 +189,93 @@ to edit the procedure with your specified editor.
 +
 
 NOTE: If you don't have an RFD, set any attenuation before the RDBEs
-appropriately. If there are just UDCs, a good starting value might be
+appropriately. In this case, a good starting UDC attention might be
 `20`. Use the value you choose in place of the `10` in the next step.
 
 .. Set all UDC attenuators to `10`
 
 .. Iterate the following steps to get nominal RMSs of `20`:
 
-...  Check the RMS values for the current setup:
+... Check the RMS values for the current `ifdt` setup:
 
-+
+
     ifdt
     rdbe_atten=
+
 +
 
 TIP: `help=rdbe_atten` will display a help page for `rdbe_atten`
 command that explains what it does and its output.
 
-... If too high, increase individual UDC attenuators to get the RMSs closer to  `20` (if too low, decrease the UDC attenuators).
+... If the RMSs are too high, increase individual UDC attenuators to
+get the RMSs closer to  `20` (if too low, decrease the UDC
+attenuators).
+
 +
+
 If a UDC attenuator is near its maximum, `31.5`, increase the
 corresponding RFD attenuator by `10` (or `5`) dB and try again (if the
 UDC attenuation is near `0` decrease the RFD attenuation instead).
+
 +
+
 [NOTE]
 ====
 
-Adjusting the RFD attenuation may affect other channels, you may need
-to trim their UDC settings again. The typical correspondence of RFD
-channels to UDCs/IFs is given in <<rfdchannels,Table 1>>.
+Adjusting the RFD attenuation may affect other channels. If this
+happens to you, you may need to trim their UDC settings again. The
+typical correspondence of RFD channels to UDCs/IFs is given in the
+<<rfdchannels,RFD Channels>> table. This table can be used to
+determine which IFs are affected by which RFD and UDC channels.
 
 .RFD Channels
 [[rfdchannels]]
-|===============
+[cols="^,^,^,^"]
+|===
 | RFD Channel | Signal |UDC Channel|RDBE IF
 
 |  0|       H-pol Low|A-0| A-0
 |  1|       V-pol Low|A-1| A-1
 |  2|       H-pol High|BCD-0| BCD-0
 |  3|       V-pol High|BCD-1|BCD-1
-|===============
+|===
 ====
 
 +
 
-.. Once all RMS are nominal (~`20`), look at the RDBE attenuator
-values. Use the same iterative steps as above to adjust the UDC attenuators to
-put the RDBE attenuators in the range `10`-`15` if possible.
+.. Once all RMS are nominal (typically
+~`20`), look at the RDBE attenuator values. Use the same iterative
+steps as above to adjust the UDC attenuators to put the RDBE
+attenuators in the range `10`-`15` if possible.
+
 +
+
 TIP: Increasing the sum of RFD and UDC attenuation will cause the RDBE
 attenuation to decrease (and vice-versa) to reach an RMS of `20`.
+
 +
+
 TIP: It is desirable to get the RFD and UDC attenuators in the middle
 of their ranges to the extent possible, consistent with the RDBE
-attenuation being in the `10`-`15` dB range.  The RFD and UDC attenuators
+attenuation being in the `10`-`15` dB range. The RFD and UDC attenuators
 have a range of `0`-`31.5` dB (in `0.5` dB steps).
+
 +
-NOTE: There are usually fixed attenuators before the RFD that could be
-changed, but that is better avoided unless absolutely necessary.
+
+NOTE: There are usually fixed attenuators before the RFD (or UDC, if
+you don't have an RFD) that could be changed, but that is better
+avoided unless absolutely necessary.
+
++
 
 . When finished, prepare a new procedure library with just your
 updated procedure. You can use a library name of your choosing, but
-make the final procedure name `ifdbb`. In the example below, the
-new procedure library is `voattk2` (`vo` for the experiment type,
-`att` for attenuation, and `k2` as the station two-letter code).  The
-example also assumes you used `ifdt` as the name of your test
-procedure and that you were working with procedure library `vo0202k2`
-to begin with.  Please adjust the names as needed.  In _pfmed_:
+make the final procedure name `ifdbb`. In the example below, the new
+procedure library is `voattk2` (`vo` for the experiment type, `att`
+for attenuation, and `k2` as the station two-letter code). The example
+also assumes you used `ifdt` as the name of your test procedure and
+that you were working with procedure library `vo0202k2` to begin with.
+Please adjust the names as needed. In _pfmed_:
 
 +
 
@@ -227,30 +287,52 @@ ex
 ....
 
 . Consider whether to use the updated procedure locally and/or send it
-to the schedule writers for use in future experiments.  Those actions
-are described in the next two sections, in that order.
+to the Coordinating Center for use in future experiments. Those
+actions are described in the next two sections, in that order.
 
 == Updating the ifdbb procedure in a schedule locally
 
 You can use a new `ifdbb` procedure in any schedules of the
-appropriate type if schedule writers have not started using the
-new version yet.  The example below uses the names from the <<Method>>
-section above. All steps in this section should be executed as `oper`.
+appropriate type if schedule writers have not started using the new
+version yet. The example below uses the names from the <<Method>>
+section above. All steps in this section should be executed as _oper_.
 
-To update a a local `.skd` file, execute:
+This step uses the _new_ifdbb_ script. A listing of this script and a
+link to a copy are provided in the appendix <<new_ifdbb script>>.
+This script takes three arguments:
+
+[%noheader]
+[frame=none,grid=none]
+[cols="1,4"]
+
+|===
+|_procedure file_|
+The procedure file containing _just_ the new _ifdbb_ procedure.
+
+|_station name_|
+This is the station name used in the _.skd_ file.
+
+|_schedule file_|
+The _.skd_ schedule file that will be updated.
+|===
+
+For example, for the new procedure library created in the example at
+in the <<Method>> section above, `voattk2`, station `KOKEE12M`, and
+schedule _vo0202.skd_, use the commands:
 
 ....
 cd /usr2/sched
 new_ifdbb ../proc/voattk2.prc KOKEE12M vo0202.skd
 ....
 
-NOTE: If your version of the FS does not have `new_ifdbb`, you can use
-a copy that has been placed in the `oper` home directory as
-`~/new_ifdbb` and made executable with `chmod a+x ~/new_ifdbb`.
+NOTE: If your version of the FS does not have _new_ifdbb_ (it was
+added in version _10.0.0_), you can use a copy that has been placed in
+the _~oper_ directory as _new_ifdbb_ and made executable with `*chmod
+a+x ~/new_ifdbb*`.
 
 You will then need to regenerate the SNAP procedures with _drudg_. Make
 sure the procedure file is not open in the FS, or that the FS is not
-running, then:
+running, then execute:
 
 ....
 cd /usr2/sched
@@ -261,28 +343,30 @@ In response to the prompts:
 
 . Enter your station code (`K2` for our example).
 . Select option `12` to generate the procedures.
-. Answer `y` if requested to confirm purging the  existing procedure file.`
+. Answer `y` if requested to confirm purging the existing procedure file.`
 . Enter `0` to exit `drudg`.
 
 You can verify that the correct values have been inserted by opening
 the procedure library in the FS and using `ifdbb` to set the IFs up
-and `rdbe_atten=` to adjust the RDBE levels.  You should get
+and `rdbe_atten=` to adjust the RDBE levels. You should get
 results that match your changes, presumably with RMSs around `20` with
 the RDBE attenuators in the range `10`-`15` dB.
 
 TIP: You can also check that the change in the `.skd` file using the
-`diff` command, as described in
-<<Appendix C - Example diff output comparing schedule files>> below.
+`diff` command, as described in the appendix
+<<Example diff output comparing schedule files>> below.
 
 == Sending an updated ifdbb for use by schedule writers
 
-For long term changes, you can send a library with a new `ifdbb` procedure
-(`/usr2/proc/voattk2.prc` for the example in the <<Method>> section
-above) as a file attachment to the IVS Coordinator Center
-(`ivscc@lists.nasa.gov`) for use in future schedules.  Please include
-the experiment type(s) it is to be used for in your message.
+For long term changes, you can send a library with a new `ifdbb`
+procedure (`/usr2/proc/voattk2.prc` for the example in the <<Method>>
+section above) as a file attachment to the IVS Coordinating Center for
+use in future schedules. Please include the experiment type(s)/mode(s)
+it is to be used for in your message.
 
-== Appendix A - Example ifdbb procedure
+[appendix]
+
+= Example ifdbb procedure
 
 The following is a listing of the `ifdbb` procedure that was developed
 for KPGO 12m for `vo` and `v2` experiments, using this procedure.
@@ -321,15 +405,19 @@ sy=popen 's_client -h rfd -c rfd_atten=3:9 2>&1' -n rfdcn
 ....
 
 
-== Appendix B - Example rdbe_atten= output
+[appendix]
+
+= Example rdbe_atten= output
 
 The following is an example log display output for the `rdbe_atten=`
-command (as invoked by the SNAP `auto` procedure) from the KPGO 12m
-using the example `ifdbb` procedure in Appendix A.
+command (as invoked by the SNAP `auto` procedure, which is used four
+times) from the KPGO 12m using the example `ifdbb` procedure in the
+appendix <<Example ifdbb procedure>>.
 
 There are three things to notice here:
 
-. The attenuator settings are all approximately in the `10`-`15` dB range.
+. The attenuator settings are all approximately in the `10`-`15` dB
+range.
 
 . The RMSs are all about `20`.
 
@@ -360,9 +448,227 @@ variation.
 19:02:04/rdbe_attend/,,, 0,13.5,20.6, 1,13.0,20.4
 ....
 
-== Appendix C - Example diff output comparing schedule files
+[appendix]
 
-You can use the `diff` command to compare the result of `new_ifdbb`
+= new_ifdbb script
+
+A copy of this script can be found in the file _new_ifdbb_ at:
+https://github.com/nvi-inc/rdbe_att and a listing is provided below.
+Please be aware that the FS may have an updated version in the file
+_new_ifdbb/new_ifdbb_ at: https://github.com/nvi-inc/fs.
+
+....
+#!/usr/bin/perl
+#
+# Copyright (c) 2020-2021 NVI, Inc.
+#
+# This file is part of VLBI Field System
+# (see http://github.com/nvi-inc/fs).
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+
+
+if ($#ARGV < 0) {
+    print
+"Usage: $0 new station files
+
+Insert content of file 'new' for the 'ifdbb' procedure of 'station' in 'files'.
+
+ - Version 1.03
+ - The 'files' should be '.skd' schedules for broadband observations that
+   contain a section for 'station' in the '\$PROCS' block.
+ - File 'new' must start with a 'define  ifdbb ' line and end with an 'enddef'
+   line
+ - A line that is known to be correct in all details is always used in place
+   of the first line in 'new'.
+ - A progress report is printed during processing. It may be useful for
+   troubleshooting, e.g., 'station' (which is case sensitive) being misspelled.
+ - DOS/Windows line endings in 'new' and the input 'files' will be converted to
+   UNIX line endings while being copied to the output 'files'.
+ - The original input 'files' are renamed with a '.bak' extension as a backup.
+   The are used to automatically recover from some errors and can be used
+   manually recover from any others.
+ - Even if the content is the same, what is in 'new' will replace an old
+   'ifdbb' procedure. If no errors were reported in the processing, you can
+   check for this by using 'diff' to compare the output version to the '.bak'
+   version, no change will be visible.
+";
+    exit -1;
+}
+
+$new = shift or die "Try $0 for help\n";
+open(NEW,$new) || die "Can't open $new\n";
+
+$station = shift or die "Try $0 for help\n";
+
+FILE: foreach $name (@ARGV) {
+    print "Processing $name\n";
+    seek NEW, 0, SEEK_SET or die "Cannot rewind $new: $!";
+    $bak = $name . ".bak";
+    $out = $name;
+    if (!-e $name) {
+        die "Can't find $name Quitting.\n";
+    }
+
+# rename the original if we can and open the files
+
+    if (-e $bak) {
+        die "Backup-file $bak already exists, giving up.\n";
+    }
+
+    rename ($out,$bak) ||die "renaming $out to $bak failed: $!, giving up.\n";
+
+    if(!open(BAK,$bak)) {
+        print "Failed to open $bak: $!\n";
+        if(!rename($bak,$out)) {
+            print "Unable to rename $bak to $out: $!\n";
+            die "Please fix whatever the problem is and rename it yourself.\n";
+        } else {
+            die "I renamed $bak to $out for you.\n";
+        }
+    }
+
+    if(!open(OUT,">" . $out)) {
+        print "Failed to open $out: $!\n";
+        if((!close(BAK)) || (!rename($bak,$out))) {
+            print "Unable to rename $bak to $out: $!\n";
+            die "Please fix whatever the problem is and rename it yourself.\n";
+        } else {
+          die "I renamed $bak to $out for you.\n";
+        }
+    }
+
+#process
+
+    $line=0;
+    $change=0;
+    $procs_found=0;
+    $station_found=0;
+    $ifdbb_found=0;
+    $enddef_found=0;
+
+    while(<BAK>) {
+        s/\r//;
+        $line++;
+        if (!$procs_found) {
+            if(/^\$PROCS$/) {
+                print "Found \$PROCS\n";
+                $procs_found=1;
+            }
+            print OUT;
+            next;
+        }
+        if(!$station_found) {
+            if(/^BEGIN +(\w+) *$/) {
+                print "Found $1\n";
+                if ($1 eq $station) {
+                    $station_found = 1;
+                }
+            }
+            print OUT;
+            next;
+        }
+        if(!$ifdbb_found) {
+            if(/^END /) {
+                last;
+            } elsif(/^define  ifdbb /) {
+                print "Found old ifdbb\n";
+                $ifdbb_found = 1;
+                $new_lines=0;
+                $enddef_line=0;
+                $newdef_found=0;
+                while(<NEW>) {
+                    s/\r//;
+                    $new_lines++;
+                    if(/^define  ifdbb / && $new_lines == 1) {
+                        $_ = "define  ifdbb         00000000000x\n";
+                        $newdef_found=1;
+                    } elsif(/^enddef$/) {
+                        $enddef_line=$new_lines;
+                    }
+                    print OUT;
+                }
+                if(!$newdef_found || $enddef_line != $new_lines) {
+                    last;
+                }
+                print "New ifdbb inserted\n";
+                $change=1;
+                while(<BAK>) {
+                    s/\r//;
+                    if (/^enddef/) {
+                        $enddef_found=1;
+                        last;
+                    } else {
+                        next;
+                    }
+                }
+                next;
+            } else {
+                print OUT;
+                next;
+            }
+        }
+        print OUT;
+    }
+    $rename=1;
+    if(!$procs_found) {
+        print "Warning: $PROCS not found in $name.\n";
+    } elsif(!$station_found) {
+        print "Warning: $station procedures not found in $name.\n";
+    } elsif(!$ifdbb_found) {
+        print "Warning: ifdbb procedure for $station not found in $name.\n";
+    } elsif(!$newdef_found || $enddef_line != $new_lines) {
+        print "Warning: contents of $new malformed.\n";
+    } elsif(!$enddef_found) {
+        print "Warning: No enddef for original ifdbb procedure was found.\n";
+    } else {
+        $rename=0;
+    }
+    if(!close(OUT)) {
+        $rename=1;
+    print "Warning: Unable to close to $out: $!\n";
+    }
+    if(!close(BAK)) {
+        $rename=1;
+    print "Warning: Unable to close to $bak: $!\n";
+    }
+
+    if($rename || $change == 0) {
+        if(!rename($bak,$out)) {
+            print "Warning: Unable to rename '$bak' to '$out': $!\n";
+            if($rename) {
+                print "Warning: Please fix whatever the problem is and rename it yourself,\n";
+                print "Warning: probably using 'mv $bak $out'\n";
+            } else {
+                print "Warning: It appears that $out did not need any changes,\n";
+                print "Warning: but to be safe you should probably \"";
+                print "Warning: use 'mv $bak $out'\n";
+            }
+        } elsif($rename) {
+            print "Warning: I renamed '$bak' to '$out' for you.\n";
+
+        }
+    }
+}
+....
+
+[appendix]
+
+= Example diff output comparing schedule files
+
+You can use the _diff_ command to compare the result of _new_ifdbb_
 script to the original schedule. Working with the examples in this
 document, the following commands can be used:
 
@@ -375,7 +681,7 @@ In the following output generated from these commands, please note that:
 
 . Only lines that changed are shown.
 
-. Lines from the updated schedule (the first file in the `diff`
+. Lines from the updated schedule (the first file in the _diff_
 command) are preceded by `<`; lines from the old schedule (second
 file), `>`.
 
@@ -385,12 +691,12 @@ that refer to LO settings are shown as changed. Some attenuator
 setting lines may not be shown if they didn't change.
 
 . The station for which the change was made is not visible. However,
-if you used your station name with `new_ifdbb`, the change was for
+if you used your station name with _new_ifdbb_, the change was for
 your station. You can also verify that you have updated the procedure
 for your station by testing the new `ifdbb` procedure as described at
 the end of the <<Updating the ifdbb procedure in a schedule locally>>
 section above. Alternatively, you can list it from a newly generated
-procedure library (`vo0202k2.prc` for the example) in _pfmed_ (use the
+procedure library (_vo0202k2.prc_ for the example) in _pfmed_ (use the
 `li` command) to see if you get the updated version. The method for
 regenerating the library is also described in the same section above.
 
