@@ -22,7 +22,7 @@
 
 = DRAFT Method for setting attenuation for RDBEs
 E. Himwich, C. Ruszczyk, K. Imai, C. Coughlin, M. Poirier, A. Burns, E. Terrazas
-Version 0.92 - August 2020
+Version 0.93 - October 2021
 
 :sectnums:
 
@@ -30,11 +30,11 @@ Version 0.92 - August 2020
 
 The <<Method>> section below can be used to adjust the attenuation
 settings depending on the observing mode. The observing mode usually
-stays the same for a given experiment type. If the observing changes
-with an experiment, at this time the only way to deal with that is to
-find the best compromise of attenuation settings for all the modes in
-the experiment. Additionally, please be aware that more than one
-experiment type may use the same mode.
+stays the same for a given experiment type. It is not currently
+possible to change the mode in an experiment from the schedule file.
+When that becomes possible, each mode can supply its own attenuator
+settings. Additionally, please be aware that more than one experiment
+type may use the same mode.
 
 Before a new observing mode is used at a station for the first time,
 the method given here can be used to adjust the attenuation and then
